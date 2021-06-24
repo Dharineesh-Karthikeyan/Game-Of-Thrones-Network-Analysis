@@ -1,0 +1,155 @@
+
+
+```{r warning=False}
+library(tidyverse)
+library(igraph)
+library(statnet)
+```
+
+```{r}
+load("C:\\Users\\dhari\\Desktop\\Sem 6\\Graph Analytics And Algorithms\\Lab\\Case Study\\union_edges.RData")
+load("C:\\Users\\dhari\\Desktop\\Sem 6\\Graph Analytics And Algorithms\\Lab\\Case Study\\union_characters.RData")
+```
+
+```{r warning=False}
+union_graph <- graph_from_data_frame(union_edges, directed = TRUE, vertices = union_characters)
+
+color_vertices <- union_characters %>% group_by(house, color) %>% summarise(n = n()) %>% filter(!is.na(color))
+
+colors_edges <- union_edges %>% group_by(type, color) %>% summarise(n = n()) %>% filter(!is.na(color))
+
+layout <- layout_with_fr(union_graph)
+```
+
+
+```{r}
+print('Number of nodes')
+gorder(union_graph)
+print('NUmber of edges')
+gsize(union_graph)
+```
+
+
+```{r fig.width=80, fig.height=80}
+plot(union_graph,
+     layout = layout,
+     vertex.label = gsub(" ", "\n", V(union_graph)$name),
+     vertex.shape = V(union_graph)$shape,
+     vertex.color = V(union_graph)$color, 
+     vertex.size = (V(union_graph)$popularity + 0.5) * 5, 
+     vertex.label.cex = 0.75,
+     edge.arrow.size = 1,
+     edge.color = E(union_graph)$color,
+     edge.lty = E(union_graph)$lty)
+legend("topleft", legend = c(NA, "Node color:", as.character(color_vertices$house), NA, "Edge color:", as.character(colors_edges$type)), pch = 16,
+       col = c(NA, NA,color_vertices$color, NA,NA, colors_edges$color), pt.cex = 3, cex = 2, bty = "o", ncol = 1,title =  "Game of Thrones Family Ties") 
+```
+```{r fig.width=40, fig.height=40}
+n <- clusters(union_graph)$no
+dg <- decompose(union_graph)
+plot(dg[[n]]) 
+```
+
+
+```{r}
+union_graph_undir <- as.undirected(union_graph, mode = "collapse")
+```
+
+
+```{r}
+union_graph_undir_degree <- igraph::degree(union_graph_undir, mode = "total")
+
+node_degree <- data.frame(degree = union_graph_undir_degree) %>% tibble::rownames_to_column()
+
+union_characters <- left_join(union_characters, node_degree, by = c("name" = "rowname"))
+
+node_degree %>% arrange(-degree) %>% .[1:10,]
+```
+
+
+```{r fig.width=40, fig.height=40}
+selnodes <- V(union_graph)[name %in% 'Quellon Greyjoy']
+selnodes
+# get their network neighborhood 
+selegoV <- ego(union_graph, order=1, nodes = selnodes, mode = "all", mindist = 0)
+
+# turn the returned list of igraph.vs objects into a graph
+selegoG <- induced_subgraph(union_graph,unlist(selegoV))
+
+# plot the subgraph
+plot(selegoG,vertex.label=V(selegoG)$name,vertex.label.cex = 2,edge.arrow.size = 5)
+legend("topleft", legend = c(NA,"Edge color:", as.character(colors_edges$type)), pch = 16,
+       col = c(NA,NA, colors_edges$color), pt.cex = 3, cex = 2, bty = "o", ncol = 1,title =  "Quellon Greyjoy Degree Centrality") 
+```
+
+
+
+
+```{r}
+closeness <- igraph::closeness(union_graph_undir, mode = "total")
+
+node_closeness <- data.frame(closeness = closeness) %>% tibble::rownames_to_column()
+
+union_characters <- left_join(union_characters, node_closeness, by = c("name" = "rowname"))
+
+node_closeness %>% arrange(-closeness) %>% .[1:10,]
+```
+
+
+```{r fig.width=20, fig.height=20}
+selnodes <- V(union_graph)[name %in% 'Sansa Stark']
+selnodes
+# get their network neighborhood 
+selegoV <- ego(union_graph, order=1, nodes = selnodes, mode = "all", mindist = 0)
+
+# turn the returned list of igraph.vs objects into a graph
+selegoG <- induced_subgraph(union_graph,unlist(selegoV))
+
+# plot the subgraph
+plot(selegoG,vertex.label=V(selegoG)$name,vertex.label.cex = 1.5,edge.arrow.size = 5)
+legend("topleft", legend = c(NA, "Node color:", as.character(color_vertices$house), NA, "Edge color:", as.character(colors_edges$type)), pch = 16,
+       col = c(NA, NA,color_vertices$color, NA,NA, colors_edges$color), pt.cex = 3, cex = 2, bty = "o", ncol = 1,title =  "Sansa Stark Closeness Centrality") 
+```
+
+
+
+
+```{r}
+betweenness <- igraph::betweenness(union_graph_undir, directed = FALSE)
+
+
+node_betweenness <- data.frame(betweenness = betweenness) %>% tibble::rownames_to_column() 
+
+
+union_characters <- left_join(union_characters, node_betweenness, by = c("name" = "rowname"))
+
+node_betweenness %>% arrange(-betweenness) %>% .[1:10,]
+```
+
+
+```{r fig.width=40, fig.height=40}
+selnodes <- V(union_graph)[name %in% 'Eddard Stark']
+selnodes
+# get their network neighborhood 
+selegoV <- ego(union_graph, order=1, nodes = selnodes, mode = "all", mindist = 0)
+
+# turn the returned list of igraph.vs objects into a graph
+selegoG <- induced_subgraph(union_graph,unlist(selegoV))
+
+# plot the subgraph
+plot(selegoG,vertex.label=V(selegoG)$name,vertex.label.cex = 2,edge.arrow.size = 5)
+legend("topleft", legend = c(NA, "Node color:", as.character(color_vertices$house), NA, "Edge color:", as.character(colors_edges$type)), pch = 16,
+       col = c(NA, NA,color_vertices$color, NA,NA, colors_edges$color), pt.cex = 3, cex = 2, bty = "o", ncol = 1,title =  "Sansa Stark Closeness Centrality") 
+
+```
+
+
+```{r}
+clustering_coeff <- data.frame(name = V(union_graph_undir)$name,clustering_coeff = transitivity(union_graph_undir, type = "local")) %>% mutate(name = as.character(name))
+
+union_characters <- left_join(union_characters, clustering_coeff, by = "name")
+
+clustering_coeff %>%  arrange(-clustering_coeff) %>% .[1:10,]
+```
+
+
