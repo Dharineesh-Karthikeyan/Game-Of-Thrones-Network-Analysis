@@ -7,8 +7,8 @@ library(statnet)
 ```
 
 ```{r}
-load("C:\\Users\\dhari\\Desktop\\Sem 6\\Graph Analytics And Algorithms\\Lab\\Case Study\\union_edges.RData")
-load("C:\\Users\\dhari\\Desktop\\Sem 6\\Graph Analytics And Algorithms\\Lab\\Case Study\\union_characters.RData")
+load("union_edges.RData")
+load("union_characters.RData")
 ```
 
 ```{r warning=False}
