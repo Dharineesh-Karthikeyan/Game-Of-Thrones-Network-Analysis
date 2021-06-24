@@ -4,8 +4,8 @@
 A simple project on graph network analysis on the Game of thrones dataset using R. We look at the different centralities such as Degree, Closeness, Clustering, Betweenness centralities and come up with inferences and conclusions regarding who is the most influential and important character in GOT. 
 
 ## Authors:
-* [Varshini P.J](https://github.com/Varshinipj)
-* [Dharineesh Karthikeyan](https://github.com/Dharineesh-Karthikeyan)
+* [Varshini P.J](https://www.linkedin.com/in/varshini-p-j-39b6571b5/) - LinkedIn Profile
+* [Dharineesh Karthikeyan](https://www.linkedin.com/in/dharineesh-karthikeyan-8512aa131/) - LinkedIn Profile
 
 ## Content:
 * The Code.Rmd file contains the code used to get the network graphs for analysing ---> [Code](https://github.com/Dharineesh-Karthikeyan/Game-Of-Thrones-Network-Analysis/blob/main/Code.Rmd)
