@@ -1,7 +1,7 @@
-# GOT Network Analysis in R
+# GOT Graph Network Analysis in R
 
 ## Objective:
-A simple project on network analysis on the Game of thrones dataset using R. We look at the different centralities such as Degree, Closeness, Clustering, Betweenness centralities and come up with inferences and conclusions regarding who is the most influential and important character in GOT. 
+A simple project on graph network analysis on the Game of thrones dataset using R. We look at the different centralities such as Degree, Closeness, Clustering, Betweenness centralities and come up with inferences and conclusions regarding who is the most influential and important character in GOT. 
 
 ## Authors:
 * [Varshini P.J](https://github.com/Varshinipj)
