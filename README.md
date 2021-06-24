@@ -14,4 +14,5 @@ A simple project on network analysis on the Game of thrones dataset using R. We 
 
 ## Acknowledgments:
 [LINK](https://www.r-bloggers.com/2017/05/network-analysis-of-game-of-thrones-family-ties/)
+
 This blog was the main motivation and guideline which helped in working on this project. With the help of this blog, we tried to make more solid inferences that helped us to identify who had the most influence in the GOT franchise.
